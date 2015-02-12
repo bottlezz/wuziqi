@@ -5,7 +5,7 @@ var stage = new PIXI.Stage();
 var renderer = new PIXI.autoDetectRenderer(418, 418, null, true, true);
 
 //var renderer = new PIXI.CanvasRenderer(1024, 768, null, true, true);
-document.body.appendChild(renderer.view);
+document.getElementById("gameView").appendChild(renderer.view);
 requestAnimFrame(animate);
 function animate() {
   	requestAnimFrame(animate);
@@ -34,6 +34,8 @@ function GameData(){
 	this.isReady=false;
 	this.winner;
 	this.stage;
+	this.whiteAiOn=false;
+	this.blackAiOn=false;
 	this.init=function(stage){
 		//initial chess array
 		for(var i=0;i<17;i++){
@@ -152,6 +154,7 @@ stage.touchstart = stage.mousedown = function( data ) {
     	if(dx==0||dy==0||dy==16||dx==16){
     		return;
     	}
+    	if(game.blackAiOn)return;
     	if(!game.setBalckStone(dx, dy)){
     		return;
     	}
@@ -160,6 +163,7 @@ stage.touchstart = stage.mousedown = function( data ) {
     	if(dx==0||dy==0||dy==16||dx==16){
     		return;
     	}
+    	//if(game.whiteAiOn)return;
     	if(!game.setWhiteStone(dx, dy)){
     		return;
     	}
@@ -167,6 +171,37 @@ stage.touchstart = stage.mousedown = function( data ) {
     if(game.checkWins()){
     	return;
     }
-
     turnCount++;
+
+	//ai's turn
+	if(isWhite()&&game.whiteAiOn){
+		var step=getAiStep(game.chessArray, 2);
+		game.setWhiteStone(step.x, step.y);
+		if(game.checkWins()){
+    		return;
+    	}
+    	turnCount++;
+	}
+	if(isBlack()&&game.blackAiOn){
+		var step=getAiStep(game.chessArray, 1);
+		game.setBalckStone(step.x, step.y);
+		if(game.checkWins()){
+    		return;
+    	}
+    	turnCount++;
+	}
+    
+
+    
+};
+function toggleAi(){
+	game.whiteAiOn=true;
+	if(isWhite()&&game.whiteAiOn){
+		var step=getAiStep(game.chessArray, 2);
+		game.setWhiteStone(step.x, step.y);
+		if(game.checkWins()){
+    		return;
+    	}
+    	turnCount++;
+	}
 };
