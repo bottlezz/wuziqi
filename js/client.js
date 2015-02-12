@@ -15,7 +15,7 @@ function animate() {
 }
 
 var game= new GameData();
-game.init();
+game.init(stage);
 
 var turnCount=0;
 function isWhite(){
@@ -33,7 +33,8 @@ function GameData(){
 	this.chessArray= new Array();
 	this.isReady=false;
 	this.winner;
-	this.init=function(){
+	this.stage;
+	this.init=function(stage){
 		//initial chess array
 		for(var i=0;i<17;i++){
 			this.chessArray[i]=new Array();
@@ -41,6 +42,7 @@ function GameData(){
 				this.chessArray[i][j]=0;
 			}
 		}
+		this.stage=stage;
 		//mock up
 		this.players=['a','b'];
 		this.isReady=true;
@@ -118,6 +120,11 @@ function GameData(){
 		this.isReady=false;
 		console.log('ends');
 	};
+	this.restart=function(){
+		this.stage.removeChildren();
+		this.stage.addChild(board);
+		this.isReady=true;
+	}
 
 
 }
